@@ -15,12 +15,16 @@ deta = Deta(st.secrets['deta_key'])
 # Create a new database "wwlog-db"
 db = deta.Base("wwlog-db")
 
-"---"
-"Here's everything stored in the database:"
-# This reads all items from the database and displays them to your app.
 # db_content is a list of dictionaries. You can do everything you want with it.
 db_content = db.fetch().items
-st.write(db_content)
+
+# last session
+last_session = db_content[len(db_content) - 1]
+
+"---"
+st.markdown(f"**{len(db_content)}** session so far in 2023.")
+
+"---"
 
 
 
