@@ -1,9 +1,7 @@
 # main.py
 
 import streamlit as st
-import pandas as pd
-from google.oauth2 import service_account
-from gsheetsdb import connect
+from deta import Deta
 
 st.write("""
 # Whitewater Log 🌊
@@ -29,6 +27,15 @@ with st.form('log_form'):
 
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
+
+    # Connect to Deta Base with your Project Key
+    deta = Deta(st.secrets['deta_key'])
+
+    # Create a new database "wwlog-db"
+    db = deta.Base("wwlog-db")
+
+    # If the user clicked the submit button,
+    # write the data from the form to the database.
     if submitted:
         st.markdown(f"""
             📝 **Entry**
@@ -36,6 +43,16 @@ with st.form('log_form'):
             - River: `{river}`
             - Level: `{level} {level_type}`
         """)
+        db.put({'Date':date.strftime('%Y-%m-%d'), 'River': river,
+                'Level':level, 'level_type':level_type, 'Notes':notes})
+
+"---"
+"Here's everything stored in the database:"
+# This reads all items from the database and displays them to your app.
+# db_content is a list of dictionaries. You can do everything you want with it.
+db_content = db.fetch().items
+st.write(db_content)
+
 
 
 
