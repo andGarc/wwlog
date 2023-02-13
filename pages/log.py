@@ -4,7 +4,7 @@ import streamlit as st
 from deta import Deta
 
 st.write("""
-# Whitewater Log 🌊
+# 🌊 Whitewater Log
 """)
 
 with st.form('log_form', clear_on_submit=True):
