@@ -27,6 +27,7 @@ numpy==1.24.2
 packaging==23.0
 pandas==1.5.3
 Pillow==9.4.0
+prettytable==3.6.0
 protobuf==3.20.3
 pyarrow==11.0.0
 pyasn1==0.4.8
@@ -43,9 +44,11 @@ requests==2.28.2
 rich==13.3.1
 rsa==4.9
 semver==2.13.0
+simplejson==3.18.3
 six==1.16.0
 smmap==5.0.0
 streamlit==1.18.1
+streamlit-elements==0.1.0
 toml==0.10.2
 toolz==0.12.0
 tornado==6.2
@@ -54,4 +57,5 @@ tzdata==2022.7
 tzlocal==4.2
 urllib3==1.26.14
 validators==0.20.0
+wcwidth==0.2.6
 zipp==3.13.0
