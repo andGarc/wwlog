@@ -20,7 +20,7 @@ db = deta.Base("wwlog-db")
 db_content = db.fetch().items
 
 "---"
-st.markdown(f"**{len(db_content)}** sessions so far in 2023.")
+st.markdown(f"**{len(db_content)}** sessions in 2023.")
 #############
 # process db_contene
 # turn to df
@@ -52,6 +52,7 @@ with elements("nivo_charts"):
             indexBy="Month_Year",
             valueFormat="0",
             margin={ "top": 70, "right": 80, "bottom": 40, "left": 80 },
+            colors={ 'scheme': 'paired' },
             borderColor={ "from": "color" },
             gridLabelOffset=36,
             dotSize=10,
@@ -61,5 +62,11 @@ with elements("nivo_charts"):
             theme={
                 "background": "#FFFFFF",
                 "textColor": "#31333F",
+            },
+            axisLeft={
+                "tickSize": 5,
+                "tickPadding": 5,
+                "tickRotation": 0,
+                "tickValues":5
             }
         )
