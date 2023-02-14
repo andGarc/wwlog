@@ -7,7 +7,7 @@ from streamlit_elements import elements, mui, html
 from streamlit_elements import nivo
 
 st.write("""
-# 🌊 Whitewater Log
+# Whitewater Log
 """)
 
 # Connect to Deta Base with your Project Key
