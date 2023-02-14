@@ -20,7 +20,7 @@ db = deta.Base("wwlog-db")
 db_content = db.fetch().items
 
 "---"
-st.markdown(f"**{len(db_content)}** session so far in 2023.")
+st.markdown(f"**{len(db_content)}** sessions so far in 2023.")
 #############
 # process db_contene
 # turn to df
