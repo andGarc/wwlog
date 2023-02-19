@@ -12,7 +12,7 @@ with st.form('log_form', clear_on_submit=True):
 
     river = st.selectbox(
         'Select a river section',
-        ('Little Falls', 'Great Falls', 'Upper Yough')
+        ('Little Falls', 'Great Falls', 'Yough')
     )
 
     level = st.number_input('Level', 
@@ -46,8 +46,3 @@ with st.form('log_form', clear_on_submit=True):
         db.put({'Date':date.strftime('%Y-%m-%d'), 'River': river,
                 'Level':level, 'level_type':level_type, 'Notes':notes})
         st.markdown('**Entry recorded.**')
-
-
-
-
-
