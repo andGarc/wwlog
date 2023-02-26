@@ -12,7 +12,7 @@ with st.form('log_form', clear_on_submit=True):
 
     river = st.selectbox(
         'Select a river section',
-        ('Little Falls', 'Great Falls', 'Yough')
+        ('Little Falls', 'Great Falls', 'Yough', 'Other')
     )
 
     level = st.number_input('Level', 
