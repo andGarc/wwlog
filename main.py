@@ -1,72 +1,97 @@
 # main.py
 
+import altair as alt
 import streamlit as st
 import pandas as pd
 from deta import Deta
-from streamlit_elements import elements, mui, html
+from streamlit_elements import elements, mui
 from streamlit_elements import nivo
 
+
+st.set_page_config(
+    page_title="AG Whitewater Log", layout="centered"
+)
+
+# get data
+def get_data():
+    # Connect to Deta Base with your Project Key and fetch items
+    deta = Deta(st.secrets['deta_key'])
+    db = deta.Base("wwlog-db")
+    data = db.fetch().items
+    data =  pd.DataFrame(data)
+    # get month and year into a column
+    data['Month_Year'] = data['Date'].apply(lambda x: x[:7]) 
+    return data
+
+# get number of sessions 
+def get_total_sessions(df):
+    return len(df)
+
+# get latest session
+def get_lastest_session(df):
+    last_time = df.sort_values(by=['Date']).iloc[-1]['Date']
+    return last_time
+
+# bar chart 
+def get_trend_bar_chart(df):
+    # group and select records for the latest month
+    data = df.groupby(['Month_Year'])['key'].count().to_frame().reset_index()
+
+    # make chart
+    bar_chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X('Month_Year', axis=alt.Axis(title='')),
+        y=alt.Y('key', axis=alt.Axis(title='# sessions')),
+        color=alt.value('grey')
+    ).interactive()
+
+    # add labels to the bars
+    text = alt.Chart(data).mark_text(
+        align='center',
+        baseline='middle',
+        dy=-5  # Adjust the vertical position of the labels
+    ).encode(
+        x='Month_Year',
+        y='key',
+        text='key:Q'
+    )
+
+    bar_chart_with_labels = bar_chart + text
+
+    return bar_chart_with_labels
+
+# donut chart
+def get_donut_chart(df):
+    # get max date data
+    max_date = df['Month_Year'].max()
+    # group and select records for the latest month
+    data = df.groupby(['Month_Year', 'River'])['key'].count().to_frame().reset_index()
+    max_date_records = data[data['Month_Year'] == max_date]
+    # make chart
+    donut_chart = alt.Chart(max_date_records).mark_arc(innerRadius=80).encode(
+        theta="key",
+        color="River:N",
+    ).interactive()
+    return donut_chart
+
+
+source_data = get_data()
+
 st.write("""
-# Whitewater Log
-""")
-
-# Connect to Deta Base with your Project Key
-deta = Deta(st.secrets['deta_key'])
-
-# Create a new database "wwlog-db"
-db = deta.Base("wwlog-db")
-
-# db_content is a list of dictionaries. You can do everything you want with it.
-db_content = db.fetch().items
-
+# AG Whitewater Log
+""")      
 "---"
-st.markdown(f"**{len(db_content)}** sessions in 2023.")
-#############
-# process db_contene
-# turn to df
-df_content = pd.DataFrame(db_content)
-#############
-# get lastest entry
-last_time = df_content.sort_values(by=['Date']).iloc[-1]['Date']
-st.markdown(f"You were last on the river on **{last_time}**.")
-#############
-
-# get month of date column
-df_content['Month_Year'] = df_content['Date'].apply(lambda x: x[:7]) 
+st.markdown(f"**{get_total_sessions(source_data)}** sessions in 2023.")
+st.markdown(f"You were last on the river on **{get_lastest_session(source_data)}**.")
 
 # get counts per month/year
-df_river_count = df_content.groupby(['Month_Year'])['key'].count().to_frame().reset_index()
+df_river_count = source_data.groupby(['Month_Year',])['key'].count().to_frame().reset_index()
 # turn each row to a dic
 data_dic = df_river_count.to_dict(orient='records')
 
+"---"
+st.markdown("##### Current Month")
+st.altair_chart(get_donut_chart(source_data), use_container_width=True)
 
 "---"
-st.markdown("##### Monthly Summary")
-with elements("nivo_charts"):
-    DATA = data_dic
-
-    with mui.Box(sx={"height": 500}):
-        nivo.Bar(
-            data=DATA,
-            keys=["key"],
-            indexBy="Month_Year",
-            valueFormat="0",
-            margin={ "top": 70, "right": 80, "bottom": 40, "left": 80 },
-            colors={ 'scheme': 'paired' },
-            borderColor={ "from": "color" },
-            gridLabelOffset=36,
-            dotSize=10,
-            dotColor={ "theme": "background" },
-            dotBorderWidth=2,
-            motionConfig="wobbly",
-            theme={
-                "background": "#FFFFFF",
-                "textColor": "#31333F",
-            },
-            axisLeft={
-                "tickSize": 5,
-                "tickPadding": 5,
-                "tickRotation": 0,
-                "tickValues":5
-            }
-        )
+st.markdown("##### Monthly Trend")
+st.altair_chart(get_trend_bar_chart(source_data), use_container_width=True)

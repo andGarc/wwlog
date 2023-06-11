@@ -3,8 +3,13 @@
 import streamlit as st
 from deta import Deta
 
+
+st.set_page_config(
+    page_title="AG Whitewater Log", layout="centered"
+)
+
 st.write("""
-# Whitewater Log
+# AG Whitewater Log
 """)
 
 with st.form('log_form', clear_on_submit=True):
