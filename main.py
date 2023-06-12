@@ -18,9 +18,12 @@ def get_data():
     deta = Deta(st.secrets['deta_key'])
     db = deta.Base("wwlog-db")
     data = db.fetch().items
+
     data =  pd.DataFrame(data)
+
     # get month and year into a column
     data['Month_Year'] = data['Date'].apply(lambda x: x[:7]) 
+
     return data
 
 # get number of sessions 
@@ -41,7 +44,7 @@ def get_trend_bar_chart(df):
     bar_chart = alt.Chart(data).mark_bar().encode(
         x=alt.X('Month_Year', axis=alt.Axis(title='')),
         y=alt.Y('key', axis=alt.Axis(title='# sessions')),
-        color=alt.value('grey')
+        color=alt.value('lightgray')
     ).interactive()
 
     # add labels to the bars
@@ -63,16 +66,18 @@ def get_trend_bar_chart(df):
 def get_donut_chart(df):
     # get max date data
     max_date = df['Month_Year'].max()
+
     # group and select records for the latest month
     data = df.groupby(['Month_Year', 'River'])['key'].count().to_frame().reset_index()
     max_date_records = data[data['Month_Year'] == max_date]
-    # make chart
+
+    # make donut chart
     donut_chart = alt.Chart(max_date_records).mark_arc(innerRadius=80).encode(
         theta="key",
         color="River:N",
-    ).interactive()
+    )
+    
     return donut_chart
-
 
 source_data = get_data()
 
