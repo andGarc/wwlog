@@ -1,7 +1,7 @@
 # main.py
 
 import streamlit as st
-from deta import Deta
+from db import add_record_ww
 
 
 st.set_page_config(
@@ -33,12 +33,6 @@ with st.form('log_form', clear_on_submit=True):
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
 
-    # Connect to Deta Base with your Project Key
-    deta = Deta(st.secrets['deta_key'])
-
-    # Create a new database "wwlog-db"
-    db = deta.Base("wwlog-db")
-
     # If the user clicked the submit button,
     # write the data from the form to the database.
     if submitted:
@@ -48,6 +42,13 @@ with st.form('log_form', clear_on_submit=True):
             - River: `{river}`
             - Level: `{level} {level_type}`
         """)
-        db.put({'Date':date.strftime('%Y-%m-%d'), 'River': river,
-                'Level':level, 'level_type':level_type, 'Notes':notes})
+
+        # New record            
+        data = {'Date':[date],
+                'Level':[level],
+                'Notes': [notes],
+                'River': [river],
+                'level_type': [level_type]
+                }
+        add_record_ww(data)
         st.markdown('**Entry recorded.**')
