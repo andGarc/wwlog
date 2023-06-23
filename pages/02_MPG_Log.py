@@ -22,7 +22,7 @@ with st.expander('Log a New Entry ✏️'):
                             min_value=0.0, max_value=20000.0, step=0.01)
 
         expected_miles = st.number_input('Expected Miles', 
-                            min_value=0, max_value=800, step=1)
+                            min_value=0, max_value=1000, step=1)
 
 
         # Every form must have a submit button.
@@ -39,12 +39,12 @@ with st.expander('Log a New Entry ✏️'):
                 - Expected Miles: `{expected_miles} mi`
             """)
             # New record            
-            data = {'Actual_Miles':[actual_miles],
+            data = {'Actual_Miles':0,
                     'Date':[date.strftime('%Y-%m-%d')],
                     'Expected_Miles':[expected_miles],
                     'Gallons': [gallons]
                     }
-            add_record_mpg(data)
+            add_record_mpg(data, actual_miles)
             st.markdown('**Entry recorded.**')
 
 "---"

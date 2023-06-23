@@ -130,3 +130,6 @@ dmypy.json
 
 # streamlit
 .streamlit
+
+# mac
+.DS_Store

@@ -11,14 +11,12 @@ def add_record_ww(record):
     engine = create_engine(db_url)
     df.to_sql(table, engine, if_exists='append', index=False)
 
-def add_record_mpg(record):
-    df = pd.DataFrame(record)
+def add_record_mpg(record, actual_miles):
     db_url = st.secrets['db_url']
     table =  st.secrets['mpg_table']
     conn = psycopg2.connect(db_url)
     engine = create_engine(db_url)
-    df.to_sql(table, engine, if_exists='append', index=False)
-
+    
     # update last record
     # Create a cursor object to interact with the database
     cursor = conn.cursor()
@@ -26,11 +24,15 @@ def add_record_mpg(record):
     # update actual miles for last record
     update_query = f"""
         UPDATE {table}
-        SET "Actual_Miles" = {record['Actual_Miles'][0]}
+        SET "Actual_Miles" = {actual_miles}
         WHERE "Actual_Miles" = 0
     """
     cursor.execute(update_query)
     conn.commit()
-    cursor.close()
 
+    # add new record
+    df = pd.DataFrame(record)
+    df.to_sql(table, engine, if_exists='append', index=False)
+
+    cursor.close()
     conn.close()
