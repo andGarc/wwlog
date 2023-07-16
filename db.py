@@ -8,6 +8,7 @@ def add_record_ww(record):
     db_url = st.secrets['db_url']
     table =  st.secrets['ww_table']
     conn = psycopg2.connect(db_url)
+    print(db_url)
     engine = create_engine(db_url)
     df.to_sql(table, engine, if_exists='append', index=False)
 
