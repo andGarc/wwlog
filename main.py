@@ -1,8 +1,6 @@
 # main.py
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from db import get_total_sessions_ww, get_last_on_river_ww
 
 st.set_page_config(
