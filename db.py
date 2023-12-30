@@ -12,28 +12,20 @@ def add_record_ww(record):
     engine = create_engine(db_url)
     df.to_sql(table, engine, if_exists='append', index=False)
 
-def add_record_mpg(record, actual_miles):
+def get_total_sessions_ww():
     db_url = st.secrets['db_url']
-    table =  st.secrets['mpg_table']
+    table =  st.secrets['ww_table']
     conn = psycopg2.connect(db_url)
     engine = create_engine(db_url)
-    
-    # update last record
-    # Create a cursor object to interact with the database
-    cursor = conn.cursor()
+    query = f"SELECT COUNT(*) FROM {table}"
+    count_df = pd.read_sql_query(text(query), engine.connect())
+    return count_df.iloc[0][0]
 
-    # update actual miles for last record
-    update_query = f"""
-        UPDATE {table}
-        SET "Actual_Miles" = {actual_miles}
-        WHERE "Actual_Miles" = 0
-    """
-    cursor.execute(update_query)
-    conn.commit()
-
-    # add new record
-    df = pd.DataFrame(record)
-    df.to_sql(table, engine, if_exists='append', index=False)
-
-    cursor.close()
-    conn.close()
+def get_last_on_river_ww():
+    db_url = st.secrets['db_url']
+    table =  st.secrets['ww_table']
+    conn = psycopg2.connect(db_url)
+    engine = create_engine(db_url)
+    query = f'SELECT MAX("Date") FROM {table}'
+    date_df = pd.read_sql_query(text(query), engine.connect())
+    return date_df.iloc[0][0]
