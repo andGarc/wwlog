@@ -13,7 +13,6 @@ data_df = load_data()
 
 st.write("""
 # AG Logs  
-Select a log on the right to start.  
 See summaries below.  
 """)  
 "---"
