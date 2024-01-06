@@ -36,11 +36,5 @@ def get_total_sessions_ww_curr_year(df, year=datetime.now().year):
     print(year_counts)
     return 1
 
-def get_last_on_river_ww():
-    db_url = st.secrets['db_url']
-    table =  st.secrets['ww_table']
-    conn = psycopg2.connect(db_url)
-    engine = create_engine(db_url)
-    query = f'SELECT MAX("Date") FROM {table}'
-    date_df = pd.read_sql_query(text(query), engine.connect())
-    return date_df.iloc[0][0]
+def get_last_on_river_ww(df):
+    return df['Date'].dt.date.max()

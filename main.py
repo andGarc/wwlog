@@ -27,6 +27,6 @@ st.markdown(f"### {get_total_sessions_ww_curr_year(data_df)} sessions"
             if get_total_sessions_ww_curr_year(data_df) > 1 
             else f"### {get_total_sessions_ww_curr_year(data_df)} session")
 
-st.markdown(f"Last on the river on **{get_last_on_river_ww()}**")
+st.markdown(f"Last on the river on **{get_last_on_river_ww(data_df)}**")
 "---"
 
