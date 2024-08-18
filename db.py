@@ -32,9 +32,5 @@ def get_total_sessions_ww_curr_year(df, year=datetime.now().year):
     # return the value for the latest year
     return year_counts[year_counts['year'] == year]['count'].iloc[0]
 
-
-    print(year_counts)
-    return 1
-
 def get_last_on_river_ww(df):
     return df['Date'].dt.date.max()
