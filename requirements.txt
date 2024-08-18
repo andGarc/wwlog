@@ -32,7 +32,6 @@ altair==4.2.2
  markdown-it-py==2.1.0
  MarkupSafe==2.1.2
  matplotlib==3.5.3
- matplotlib-base==3.5.3
  matplotlib-inline==0.1.6
  mdurl==0.1.2
  mo-dots==4.22.21108
