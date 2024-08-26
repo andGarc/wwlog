@@ -76,6 +76,8 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+.ipynb
+notebooks/
 
 # IPython
 profile_default/
@@ -133,3 +135,6 @@ dmypy.json
 
 # mac
 .DS_Store
+
+# sqlite
+*.db
